@@ -3,15 +3,15 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "sites_azurepetstore_name": {
-      "defaultValue": "youraliasazurepetstore",
+      "defaultValue": "dgnsanealiasazurepetstore",
       "type": "String"
     },
     "serverfarms_azurepetstoreasp_name": {
-      "defaultValue": "youraliasazurepetstoreasp",
+      "defaultValue": "dgnsanealiasazurepetstoreasp",
       "type": "String"
     },
     "registries_azurepetstorecr_name": {
-      "defaultValue": "youraliasazurepetstorecr",
+      "defaultValue": "dgnsanealiasazurepetstorecr",
       "type": "String"
     }
   },
