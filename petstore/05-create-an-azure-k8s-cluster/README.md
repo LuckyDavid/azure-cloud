@@ -39,7 +39,9 @@ In this section, we'll get an AKS Cluster provisioned in the same Resource Group
    `az acr login -n <yourazurecontainerregistry>`
 
 7. Create a Kubernetes cluster in an Azure Kubernetes Service (AKS)
+
 Note: setting VM Size to Basic_A0, starting node count to 1 and load balancer sku to basic (although not sure if it is going to be possible) in order to reduce costs
+
    `az aks create --resource-group=<yourresourcegroup> --name=<youralias>azurepetstore-akscluster --attach-acr <yourazurecontainerregistry> --dns-name-prefix=<youralias>azurepetstoreserviceaks --node-vm-size Basic_A0 --node-count 1 --load-balancer-sku basic --generate-ssh-keys`
 
    This will take some time to complete, 5-10 minutes or so...
