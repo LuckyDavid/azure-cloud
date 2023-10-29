@@ -39,8 +39,8 @@ In this section, we'll get an AKS Cluster provisioned in the same Resource Group
    `az acr login -n <yourazurecontainerregistry>`
 
 7. Create a Kubernetes cluster in an Azure Kubernetes Service (AKS)
-
-   `az aks create --resource-group=<yourresourcegroup> --name=<youralias>azurepetstore-akscluster --attach-acr <yourazurecontainerregistry> --dns-name-prefix=<youralias>azurepetstoreserviceaks --generate-ssh-keys`
+Note: setting VM Size to Basic_A0, starting node count to 1 and load balancer sku to basic (although not sure if it is going to be possible) in order to reduce costs
+   `az aks create --resource-group=<yourresourcegroup> --name=<youralias>azurepetstore-akscluster --attach-acr <yourazurecontainerregistry> --dns-name-prefix=<youralias>azurepetstoreserviceaks --node-vm-size Basic_A0 --node-count 1 --load-balancer-sku basic --generate-ssh-keys`
 
    This will take some time to complete, 5-10 minutes or so...
 
@@ -77,7 +77,8 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
 2. We will setup a few more variables to simply our commands further down.
 
-   ```cli
+   ```
+   cli
    RESOURCE_GROUP=<yourresourcegroup>
    ACR_URL=<yourazurecontainerregistry>.azurecr.io
    REGISTRY_NAME=<yourazurecontainerregistry>
@@ -114,7 +115,8 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
 6. Instruct Helm to install and configure the Ingress controller with the images
 
-   ```cli
+   ```
+   cli
    helm install ingress-nginx ingress-nginx/ingress-nginx \
    --namespace $NAMESPACE --create-namespace \
    --set controller.replicaCount=2 \
@@ -151,7 +153,8 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
 1.  Add a user nodepool for the petstore services, the deployment yam's will use the nodeSelector ```agentpool: petstorenp2``` to deploy to this pool
     
-    ```az aks nodepool add \
+    ```
+    az aks nodepool add \
         --resource-group azurepetstorerg \
         --cluster-name azurepetstore-akscluster \
         --name petstorenp2 \
