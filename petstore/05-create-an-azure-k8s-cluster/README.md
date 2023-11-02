@@ -75,7 +75,7 @@ helm install ingress-nginx ingress-nginx/ingress-nginx \
   --namespace $NAMESPACE \
   --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
 
-Also note that at the time of this update there is an issue with AKS 1.24 and above that would require Health Prob updates if you choose to proceed with something 1.24 or greater. If you choose 1.24 or greater you will need to update the health probes to "healthz" seen here https://github.com/Azure/AKS/issues/3210 
+Also note that at the time of this update there is an issue with AKS 1.24 and above that would require Health Prob updates if you choose to proceed with something 1.24 or greater. If you choose 1.24 or greater you will need to update the health probes to "healthz" seen here https://github.com/Azure/AKS/issues/3210 -> done already on the `helm install ingress-nginx`command below
 
 2. We will setup a few more variables to simply our commands further down.
 
