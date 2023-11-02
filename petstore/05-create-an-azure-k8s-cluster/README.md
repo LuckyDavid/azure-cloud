@@ -127,6 +127,7 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
    --set controller.image.image=$CONTROLLER_IMAGE \
    --set controller.image.tag=$CONTROLLER_TAG \
    --set controller.image.digest="" \
+   --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz \
    --set controller.admissionWebhooks.patch.nodeSelector."kubernetes\.io/os"=linux \
    --set controller.admissionWebhooks.patch.image.registry=$ACR_URL \
    --set controller.admissionWebhooks.patch.image.image=$PATCH_IMAGE \
@@ -175,7 +176,8 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
    run the deployment
 
    `kubectl apply -f aks-petstorepetservice.yml --namespace $NAMESPACE`
-   
+
+   OLD (KEPT FOR REFERENCE BUT SHOULD BE IGNORED):
    `kubectl apply -f petstorepetservice-service --namespace $NAMESPACE`
 
    You should see something similar to the below image:
@@ -201,7 +203,8 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
    run the deployment
 
    `kubectl apply -f aks-petstoreproductservice.yml --namespace $NAMESPACE`
-   
+
+   OLD (KEPT FOR REFERENCE BUT SHOULD BE IGNORED):
    `kubectl apply -f petstoreproductservice-service --namespace $NAMESPACE`
 
    You should see something similar to the below image:
@@ -227,7 +230,8 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
    run the deployment
 
    `kubectl apply -f aks-petstoreorderservice.yml --namespace $NAMESPACE`
-   
+
+   OLD (KEPT FOR REFERENCE BUT SHOULD BE IGNORED):
    `kubectl apply -f petstoreorderservice-service --namespace $NAMESPACE`
 
    You should see something similar to the below image:
