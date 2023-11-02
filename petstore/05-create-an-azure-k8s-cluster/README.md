@@ -40,9 +40,9 @@ In this section, we'll get an AKS Cluster provisioned in the same Resource Group
 
 7. Create a Kubernetes cluster in an Azure Kubernetes Service (AKS)
 
-Note: setting VM Size to Basic_A0, starting node count to 1 and load balancer sku to basic (although not sure if it is going to be possible) in order to reduce costs
+Note: setting VM Size to Standard_B2s, starting node count to 2 and load balancer sku to basic (although not sure if it is going to be possible) in order to reduce costs
 
-   `az aks create --resource-group=<yourresourcegroup> --name=<youralias>azurepetstore-akscluster --attach-acr <yourazurecontainerregistry> --dns-name-prefix=<youralias>azurepetstoreserviceaks --node-vm-size Standard_B2s --node-count 1 --load-balancer-sku basic --generate-ssh-keys`
+   `az aks create --resource-group=<yourresourcegroup> --name=<youralias>azurepetstore-akscluster --attach-acr <yourazurecontainerregistry> --dns-name-prefix=<youralias>azurepetstoreserviceaks --node-vm-size Standard_B2s --node-count 1 --load-balancer-sku basic --nodepool-name <setyourdefaultnodepoolname> --generate-ssh-keys`
 
    This will take some time to complete, 5-10 minutes or so...
 
@@ -174,7 +174,7 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
    run the deployment
 
-   `kubectl apply -f aks-petstorepetservice --namespace $NAMESPACE`
+   `kubectl apply -f aks-petstorepetservice.yml --namespace $NAMESPACE`
    
    `kubectl apply -f petstorepetservice-service --namespace $NAMESPACE`
 
@@ -192,7 +192,7 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
    cd to azure-cloud/petstore/petstoreproductservice
 
-   `vi petstoreproductservice-deployment.yml`
+   `vi aks-petstoreproductservice.yml`
 
    update the image path to that of your container registry, save and exit
 
@@ -200,7 +200,7 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
    run the deployment
 
-   `kubectl apply -f petstoreproductservice-deployment --namespace $NAMESPACE`
+   `kubectl apply -f aks-petstoreproductservice.yml --namespace $NAMESPACE`
    
    `kubectl apply -f petstoreproductservice-service --namespace $NAMESPACE`
 
@@ -218,7 +218,7 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
    cd to azure-cloud/petstore/petstoreorderservice
 
-   `vi petstoreorderservice-deployment.yml`
+   `vi aks-petstoreorderservice.yml`
 
    update the image path to that of your container registry, save and exit
 
@@ -226,7 +226,7 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
    run the deployment
 
-   `kubectl apply -f petstoreorderservice-deployment --namespace $NAMESPACE`
+   `kubectl apply -f aks-petstoreorderservice.yml --namespace $NAMESPACE`
    
    `kubectl apply -f petstoreorderservice-service --namespace $NAMESPACE`
 
