@@ -40,7 +40,9 @@ In this section, we'll get an AKS Cluster provisioned in the same Resource Group
 
 7. Create a Kubernetes cluster in an Azure Kubernetes Service (AKS)
 
-   `az aks create --resource-group=<yourresourcegroup> --name=<youralias>azurepetstore-akscluster --attach-acr <yourazurecontainerregistry> --dns-name-prefix=<youralias>azurepetstoreserviceaks --generate-ssh-keys`
+Note: setting VM Size to Standard_B2s, starting node count to 2 and load balancer sku to basic (although not sure if it is going to be possible) in order to reduce costs
+
+   `az aks create --resource-group=<yourresourcegroup> --name=<youralias>azurepetstore-akscluster --attach-acr <yourazurecontainerregistry> --dns-name-prefix=<youralias>azurepetstoreserviceaks --node-vm-size Standard_B2s --node-count 1 --load-balancer-sku basic --nodepool-name <setyourdefaultnodepoolname> --generate-ssh-keys`
 
    This will take some time to complete, 5-10 minutes or so...
 
@@ -73,11 +75,12 @@ helm install ingress-nginx ingress-nginx/ingress-nginx \
   --namespace $NAMESPACE \
   --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz
 
-Also note that at the time of this update there is an issue with AKS 1.24 and above that would require Health Prob updates if you choose to proceed with something 1.24 or greater. If you choose 1.24 or greater you will need to update the health probes to "healthz" seen here https://github.com/Azure/AKS/issues/3210 
+Also note that at the time of this update there is an issue with AKS 1.24 and above that would require Health Prob updates if you choose to proceed with something 1.24 or greater. If you choose 1.24 or greater you will need to update the health probes to "healthz" seen here https://github.com/Azure/AKS/issues/3210 -> done already on the `helm install ingress-nginx`command below
 
 2. We will setup a few more variables to simply our commands further down.
 
-   ```cli
+   ```
+   cli
    RESOURCE_GROUP=<yourresourcegroup>
    ACR_URL=<yourazurecontainerregistry>.azurecr.io
    REGISTRY_NAME=<yourazurecontainerregistry>
@@ -114,7 +117,8 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
 6. Instruct Helm to install and configure the Ingress controller with the images
 
-   ```cli
+   ```
+   cli
    helm install ingress-nginx ingress-nginx/ingress-nginx \
    --namespace $NAMESPACE --create-namespace \
    --set controller.replicaCount=2 \
@@ -123,6 +127,7 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
    --set controller.image.image=$CONTROLLER_IMAGE \
    --set controller.image.tag=$CONTROLLER_TAG \
    --set controller.image.digest="" \
+   --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz \
    --set controller.admissionWebhooks.patch.nodeSelector."kubernetes\.io/os"=linux \
    --set controller.admissionWebhooks.patch.image.registry=$ACR_URL \
    --set controller.admissionWebhooks.patch.image.image=$PATCH_IMAGE \
@@ -149,28 +154,30 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
 ## Deploy Pet Store Services to AKS
 
-1.  Add a user nodepool for the petstore services, the deployment yam's will use the nodeSelector ```agentpool: petstorenp2``` to deploy to this pool
+1.  Add a user nodepool for the petstore services, the deployment yam's will use the nodeSelector ```agentpool: petstorenp2``` to deploy to this pool - **will it?**
     
-    ```az aks nodepool add \
+    ```
+    az aks nodepool add \
         --resource-group azurepetstorerg \
-        --cluster-name azurepetstore-akscluster \
+        --cluster-name <youralias>azurepetstore-akscluster \
         --name petstorenp2 \
-        --node-count 3
+        --node-count 1
     ```
 2. Deploy petstorepetservice to AKS
 
    cd to azure-cloud/petstore/petstorepetservice
 
-   `vi petstorepetservice-deployment.yml`
+   `vi aks-petstorepetservice.yml`
 
    update the image path to that of your container registry, save and exit
 
-   `image: azurepetstorecr.azurecr.io/petstorepetservice:latest`
+   `image: <yourazurecontainerregistry>.azurecr.io/petstorepetservice:latest`
 
    run the deployment
 
-   `kubectl apply -f petstorepetservice-deployment --namespace $NAMESPACE`
-   
+   `kubectl apply -f aks-petstorepetservice.yml --namespace $NAMESPACE`
+
+   OLD (KEPT FOR REFERENCE BUT SHOULD BE IGNORED):
    `kubectl apply -f petstorepetservice-service --namespace $NAMESPACE`
 
    You should see something similar to the below image:
@@ -187,16 +194,17 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
    cd to azure-cloud/petstore/petstoreproductservice
 
-   `vi petstoreproductservice-deployment.yml`
+   `vi aks-petstoreproductservice.yml`
 
    update the image path to that of your container registry, save and exit
 
-   `image: azurepetstorecr.azurecr.io/petstoreproductservice:latest`
+   `image: <yourazurecontainerregistry>.azurecr.io/petstoreproductservice:latest`
 
    run the deployment
 
-   `kubectl apply -f petstoreproductservice-deployment --namespace $NAMESPACE`
-   
+   `kubectl apply -f aks-petstoreproductservice.yml --namespace $NAMESPACE`
+
+   OLD (KEPT FOR REFERENCE BUT SHOULD BE IGNORED):
    `kubectl apply -f petstoreproductservice-service --namespace $NAMESPACE`
 
    You should see something similar to the below image:
@@ -213,16 +221,17 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
    cd to azure-cloud/petstore/petstoreorderservice
 
-   `vi petstoreorderservice-deployment.yml`
+   `vi aks-petstoreorderservice.yml`
 
    update the image path to that of your container registry, save and exit
 
-   `image: azurepetstorecr.azurecr.io/petstoreorderservice:latest`
+   `image: <yourazurecontainerregistry>.azurecr.io/petstoreorderservice:latest`
 
    run the deployment
 
-   `kubectl apply -f petstoreorderservice-deployment --namespace $NAMESPACE`
-   
+   `kubectl apply -f aks-petstoreorderservice.yml --namespace $NAMESPACE`
+
+   OLD (KEPT FOR REFERENCE BUT SHOULD BE IGNORED):
    `kubectl apply -f petstoreorderservice-service --namespace $NAMESPACE`
 
    You should see something similar to the below image:
