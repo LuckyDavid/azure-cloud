@@ -153,28 +153,28 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
 ## Deploy Pet Store Services to AKS
 
-1.  Add a user nodepool for the petstore services, the deployment yam's will use the nodeSelector ```agentpool: petstorenp2``` to deploy to this pool
+1.  Add a user nodepool for the petstore services, the deployment yam's will use the nodeSelector ```agentpool: petstorenp2``` to deploy to this pool - **will it?**
     
     ```
     az aks nodepool add \
         --resource-group azurepetstorerg \
-        --cluster-name azurepetstore-akscluster \
+        --cluster-name <youralias>azurepetstore-akscluster \
         --name petstorenp2 \
-        --node-count 3
+        --node-count 1
     ```
 2. Deploy petstorepetservice to AKS
 
    cd to azure-cloud/petstore/petstorepetservice
 
-   `vi petstorepetservice-deployment.yml`
+   `vi aks-petstorepetservice.yml`
 
    update the image path to that of your container registry, save and exit
 
-   `image: azurepetstorecr.azurecr.io/petstorepetservice:latest`
+   `image: <yourazurecontainerregistry>.azurecr.io/petstorepetservice:latest`
 
    run the deployment
 
-   `kubectl apply -f petstorepetservice-deployment --namespace $NAMESPACE`
+   `kubectl apply -f aks-petstorepetservice --namespace $NAMESPACE`
    
    `kubectl apply -f petstorepetservice-service --namespace $NAMESPACE`
 
@@ -196,7 +196,7 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
    update the image path to that of your container registry, save and exit
 
-   `image: azurepetstorecr.azurecr.io/petstoreproductservice:latest`
+   `image: <yourazurecontainerregistry>.azurecr.io/petstoreproductservice:latest`
 
    run the deployment
 
@@ -222,7 +222,7 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
    update the image path to that of your container registry, save and exit
 
-   `image: azurepetstorecr.azurecr.io/petstoreorderservice:latest`
+   `image: <yourazurecontainerregistry>.azurecr.io/petstoreorderservice:latest`
 
    run the deployment
 
