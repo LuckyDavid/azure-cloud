@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: luckydavidazurecloud 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: luckydavidazurecloud
+  template:
+    metadata:
+      labels:
+        app: luckydavidazurecloud 
+    spec:
+      containers:
+        - name: luckydavidazurecloud 
+          image: dgnsanealiasazurepetstorecr.azurecr.io/luckydavidazurecloud
+          ports:
+          - containerPort: 80
