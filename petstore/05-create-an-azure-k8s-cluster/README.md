@@ -154,7 +154,7 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
 
 ## Deploy Pet Store Services to AKS
 
-1.  Add a user nodepool for the petstore services, the deployment yam's will use the nodeSelector ```agentpool: petstorenp2``` to deploy to this pool - **will it?**
+1.  **<--IGNORE THIS STEP-->** Add a user nodepool for the petstore services, the deployment yam's will use the nodeSelector ```agentpool: petstorenp2``` to deploy to this pool
     
     ```
     az aks nodepool add \
@@ -163,6 +163,7 @@ Also note that at the time of this update there is an issue with AKS 1.24 and ab
         --name petstorenp2 \
         --node-count 1
     ```
+    **</-IGNORE THIS STEP-->**
 2. Deploy petstorepetservice to AKS
 
    cd to azure-cloud/petstore/petstorepetservice
