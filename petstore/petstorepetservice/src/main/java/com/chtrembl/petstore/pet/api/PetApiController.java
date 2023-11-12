@@ -92,10 +92,8 @@ public class PetApiController implements PetApi {
 			@NotNull @ApiParam(value = "Status values that need to be considered for filter", required = true, allowableValues = "available, pending, sold") @Valid @RequestParam(value = "status", required = true) List<String> status) {
 		conigureThreadForLogging();
 
-		String acceptType = request.getHeader("Content-Type");
-		String contentType = request.getHeader("Content-Type");
-		if (acceptType != null && contentType != null && acceptType.contains("application/json")
-				&& contentType.contains("application/json")) {
+		String accept = request.getHeader("Accept");
+		if (accept != null && accept.contains("application/json")) {
 			PetApiController.log.info(String.format(
 					"PetStorePetService incoming GET request to petstorepetservice/v2/pet/findPetsByStatus?status=%s",
 					status));
